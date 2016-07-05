@@ -8,7 +8,7 @@ phonecatControllers.controller('PhoneListCtrl', ['$http', '$scope', '$log', func
   		$scope.address = response;
   		$log.debug($scope.address);
   		});
-  	$scope.orderProp = "postal_city";
+  	$scope.orderProp = "postalcity";
   	$scope.add_new = function(){
   		$log.debug("new address:")
   		$log.debug($scope.new_address)
@@ -47,7 +47,7 @@ phonecatControllers.controller('PhoneListCtrl', ['$http', '$scope', '$log', func
   		$http.post('/address',{}, {params:{"id":$scope.addressId}}).success(
   			function(data){
   				$log.debug(data)
-  				$scope.show_info = data[0]
+  				$scope.show_info = data
   			})
   		.error(function(){
   			$log.debug("Error recieving info about certain address")

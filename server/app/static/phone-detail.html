@@ -1,7 +1,22 @@
-<div>Here will be address details....</div>
+<div class = "col-md-4">
+<img ng-src = "/home/julia/D_copy/ReachMee/trunk/phonecat/server/app/static/images/{{addressId}}">
+</div>
 
-<p><img ng-src = "/home/julia/D_copy/ReachMee/trunk/phonecat/server/app/static/images/{{addressId}}"></p>
-<p ng-repeat = "info in show_info track by $index">{{info}}</p>
-<p><button ng-click = "delete_address()">Delete this item</button></p>
+<div class = "col-md-8">
+<br/>
+<h3 class = "text-primary">
+	<p ng-if = "show_info.userseqno" >userseqno: {{show_info.userseqno}}</p>
+	<p ng-if = "show_info.addresstype" >addresstype: {{show_info.addresstype}}</p>
+	<p ng-if = "show_info.address" >address: {{show_info.address}}</p>
+	<p ng-if = "show_info.postalcode" >postalcode: {{show_info.postalcode}}</p>
+	<p ng-if = "show_info.postalcity" >postalcity: {{show_info.postalcity}}</p>
+	<p ng-if = "show_info.municipality" >municipality: {{show_info.municipality}}</p>
+</h3>
+</div>
 
-<a href="#/">Back</a>
+<div class = "col-md-12">
+<p><button ng-click = "delete_address()" class = "btn btn-danger">
+Delete this item</button></p>
+
+<h2><a href="#/" class = "text-info">Back</a></h2>
+</div>

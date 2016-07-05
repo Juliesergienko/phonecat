@@ -1,7 +1,7 @@
 <select ng-model = "orderProp">
   <option value = "address"> Name </option>
-  <option value = "id">Id </option>
-  <option value = "postal_city">City </option>
+  <option value = "userseqno">Id </option>
+  <option value = "postalcity">City </option>
 </select>
 
   <div class="container-fluid">
@@ -12,7 +12,8 @@
       <input type = "checkbox" ng-model = "should_show">Show form</input>
     <form nd-model = "new_address" name = "input_form" ng-show = "should_show" ng-submit = "add_new"
     ng-disabled = "true" ng-disabled = "input_form.$invalid">
-      <button type = "submit" ng-click = "add_new()" ng-disabled = "input_form.$invalid">
+      <button class = "btn btn-primary btn-sm"
+      type = "submit" ng-click = "add_new()" ng-disabled = "input_form.$invalid">
       Add new address</button>
       <div >
       <input type = "text" ng-model = "new_address.userseqno" placeholder = "userseqno" required> </input>

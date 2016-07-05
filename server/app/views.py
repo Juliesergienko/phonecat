@@ -1,5 +1,3 @@
-
-
 from app import app
 from flask import render_template, request, redirect
 from flask_restful import Resource, Api
@@ -76,8 +74,12 @@ class Address(Resource):
 		print "address_id", address_id
 		try:
 			cursor.execute("SELECT * FROM rm0.address WHERE userseqno=%s" %(address_id))
-			address = cursor.fetchall()
-			return address
+			address = cursor.fetchall()[0]
+
+			address_dict = {"userseqno":address[0], "addresstype":address[1],
+			"address":address[2], "postalcode":address[3], 
+			"postalcity":address[4], "municipality":address[5]}
+			return address_dict
 		except Exception as e:
 			print e
 			return "Item was returned"
