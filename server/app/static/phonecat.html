@@ -1,0 +1,46 @@
+<select ng-model = "orderProp">
+  <option value = "address"> Name </option>
+  <option value = "id">Id </option>
+  <option value = "postal_city">City </option>
+</select>
+
+  <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2">
+      <!--Sidebar content-->
+
+      Search: <input ng-model="query">
+
+    <div>
+      <button ng-click = "add_new([addresstype_input, address_input, postalcode_input, postalcity_input, municipality_input, countrycode_input, userseqno_input])">
+      Add new address
+      </button>
+      <input type = "checkbox" ng-model = "should_show">Show form</input>
+      from#####################################################################3
+      <div id = "input form" ng-show = "should_show">
+      <p><input type = "text" ng-model = "addresstype_input" placeholder = "adresstype"> </input></p>
+      <p><input type = "text" ng-model = "address_input" placeholder = "address"> </input></p>
+      <p><input type = "text" ng-model = "postalcode_input" placeholder = "postalcode"> </input></p>
+      <p><input type = "text" ng-model = "postalcity_input" placeholder = "postalcity"> </input></p>
+      <p><input type = "text" ng-model = "municipality_input" placeholder = "municipality"> </input></p>
+      <p><input type = "text" ng-model = "countrycode_input" placeholder = "countrycode"> </input></p>
+      <p><input type = "text" ng-model = "userseqno_input" placeholder = "seqno"> </input></p>
+      </div>
+    </div>
+
+    </div>
+    <div class="col-md-10">
+      <!--Body content-->
+      <ul class="address">
+        <li ng-repeat="item in address | filter:query | orderBy: orderProp"  class="address-listing">
+          <a href="#/{{item.id}}">Details</a>
+          <p>{{item.address}}</p>
+          <p>{{item.postal_city}}</p>
+          <p>{{item.postal_code | checkmark }}</p>
+
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</div>
