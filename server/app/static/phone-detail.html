@@ -1,7 +1,7 @@
 <div>Here will be address details....</div>
 
 <p><img ng-src = "/home/julia/D_copy/ReachMee/trunk/phonecat/server/app/static/images/{{addressId}}"></p>
-<p ng-repeat = "info in show_info">{{info}}</p>
+<p ng-repeat = "info in show_info track by $index">{{info}}</p>
 <p><button ng-click = "delete_address()">Delete this item</button></p>
 
-<button ng-click = "back_to_main()">Back</button>
+<a href="#/">Back</a>

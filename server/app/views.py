@@ -8,8 +8,12 @@ import psycopg2
 import json
 
 api = Api(app)
-##########################################################3
-conn = psycopg2.connect("dbname='reachmee' user='postgres' host='127.0.0.1' port='5432' password='uknowW2009'")
+######################################################
+conn = psycopg2.connect("""dbname='reachmee'
+							 user='postgres' 
+							 host='127.0.0.1'
+							 port='5432' 
+							 password='uknowW2009'""")
 cursor = conn.cursor()
 
 
@@ -26,8 +30,7 @@ def static_html(file_name):
 
 @app.route('/home/julia/D_copy/ReachMee/trunk/phonecat/server/app/static/images/<img_number>')
 def send_image(img_number):
-	file_name = "images/"+str(img_number)+".png"
-	print file_name 
+	file_name = "images/"+str(img_number)+".png" 
 	return app.send_static_file(file_name)
 
 
@@ -37,44 +40,36 @@ class Address(Resource):
 		address_list = cursor.fetchall()
 		list_to_client = []
 		for i in address_list:
-			img_url = "/home/julia/D_copy/ReachMee/trunk/phonecat/server/app/static/images/" + str(i[0])
-			i += (img_url,)
-			list_to_client.append(i)
-		print "here"
+			list_to_client += [{"userseqno":i[0], "addresstype":i[1],
+			"address":i[2], "postalcode":i[3], 
+			"postalcity":i[4], "municipality":i[5]},]
 		print list_to_client
 		return list_to_client
 
 	def put(self):
-		new_address = json.loads(request.args.get('new_address', ''))
+		new_address = json.loads(request.args.get("new_address", " "))
 		print "new_address", new_address
-		print type(new_address)
 		if new_address:
-			print "in if"
-			print "here"
 			
 			try:
-				#################################################################################3
 				cursor.execute("""INSERT INTO rm0.address (userseqno, addresstype, address, postalcode
-					,postalcity, municipality) VALUES('%s', '%s', '%s', '%s', '%s', '%s')"""
-					%(new_address["userseqno"], new_address["addresstype"], new_address["address"],
-					new_address["postalcode"], new_address["postalcity"], new_address["municipality"], 
-					))#new_address["countrycode"]
+					,postalcity, municipality) VALUES(%(userseqno)s, %(addresstype)s, %(address)s,
+					 %(postalcode)s, %(postalcity)s, %(municipality)s)"""
+					,new_address)
 				cursor.commit()
-				print "here_0"
-				root()
-			except:
-				print "there"
-				return root()
+				return "inserted"
+			except Exception as e:
+				print e
+				return "some problems"
 
 		else:
-			print "in else"
 			raise Exception("empty value for PUT method")
 
 	def delete(self):
 		address_to_delete = request.args.get("id")
 		#cursor.execite("DELETE FROM rm0.address WHERE userseqno=%s" %(address_to_delete))
 		print "will be deleted: " + address_to_delete
-		return root()
+		return "Item was deleted"
 
 	def post(self):
 		address_id = request.args.get("id")
@@ -82,25 +77,12 @@ class Address(Resource):
 		try:
 			cursor.execute("SELECT * FROM rm0.address WHERE userseqno=%s" %(address_id))
 			address = cursor.fetchall()
-			return json.dumps(address)
-		except:
-			return root()
+			return address
+		except Exception as e:
+			print e
+			return "Item was returned"
 
-api.add_resource(Address, '/address')
-
-# @app.route('/address', methods = ['DELETE'])
-# def delete_address():
-	
-# @app.route('/address', methods=['GET'])
-# def address():
+api.add_resource(Address, '/address', '/<addressId>')
 
 
-# @app.route('/address', methods = ['PUT'])
-# def add_address():
-	#print "request", request
-	
-
-# @app.route('/address', methods = ['POST'])
-# def get_certain_address():
-	
 
