@@ -1,53 +1,93 @@
-<select ng-model = "orderProp">
-  <option value = "address"> Name </option>
-  <option value = "userseqno">Id </option>
-  <option value = "postalcity">City </option>
-</select>
+<div class="col-md-12">
+  <form name = "select-form">
+    <select class="form-control" ng-model = "orderProp"
+    ng-options="item.value as item.text for item in select_items">
+    </select>
+  </form>
+</div>
 
+
+<div class="col-md-4">
   <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-2">
 
-      Search: <input ng-model="query">
-      <input type = "checkbox" ng-model = "should_show">Show form</input>
-    <form nd-model = "new_address" name = "input_form" ng-show = "should_show" ng-submit = "add_new"
-    ng-disabled = "true" ng-disabled = "input_form.$invalid">
-      <button class = "btn btn-primary btn-sm"
-      type = "submit" ng-click = "add_new()" ng-disabled = "input_form.$invalid">
-      Add new address</button>
-      <div >
-      <input type = "text" ng-model = "new_address.userseqno" placeholder = "userseqno" required> </input>
-       <br/>
-      <input type = "text" ng-model = "new_address.addresstype" placeholder = "adresstype"> </input>
-      <br/>
-      <input type = "text" ng-model = "new_address.address" placeholder = "address"> </input>
-       <br/>
-      <input type = "text" ng-model = "new_address.postalcode" placeholder = "postalcode"> </input>
-       <br/>
-      <input type = "text" ng-model = "new_address.postalcity" placeholder = "postalcity"> </input>
-       <br/>
-      <input type = "text" ng-model = "new_address.municipality" placeholder = "municipality"> </input>
-       <br/>
-      <input type = "text" ng-model = "new_address.countrycode" placeholder = "countrycode"> </input>
-       <br/>
-      <input type = "email" ng-model = "new_address.email" placeholder = "Some mail"> </input>
-       <br/>
-      
-      </div>
+    <form name = "search_form">
+      <div class = "form-group">
+        Search: <input class = "form-control" ng-model="query">
+        </div>
     </form>
 
+    <div class = "checkbox">
+      <label>
+        <input type = "checkbox" ng-model = "should_show"/>
+        Show form
+      </label>
     </div>
-    <div class="col-md-10">
-      <ul class="address">
-        <li ng-repeat="item in address | filter:query | orderBy: orderProp"  class="address-listing">
-          <a href="#/{{item.userseqno}}">Details</a>
-          <p>{{item.address}}</p>
-          <p>{{item.postalcity}}</p>
-          <p>{{item.postalcode | checkmark }}</p>
 
-        </li>
-      </ul>
 
-    </div>
+    <form name = "input_form" ng-show = "should_show" ng-submit = "add_new"
+    ng-disabled = "true" ng-disabled = "input_form.$invalid">
+      <div class="form-group">
+        <button class = "btn btn-primary btn-sm"
+        type = "submit" ng-click = "add_new()" ng-disabled = "input_form.$invalid">
+          Add new address
+        </button>
+      </div>
+
+      <div class="form-group">
+        <input type = "text" ng-model = "new_address.userseqno" id = "userseqno"
+        class="form-control" placeholder = "userseqno" ng-required> </input>
+        <span class="help-block">Can't be empty</span>
+      </div>
+
+      <div class="form-group">
+        <input type = "text" ng-model = "new_address.addresstype" 
+        class="form-control" placeholder = "adresstype"> </input>
+      </div>
+
+      <div class="form-group">
+        <input type = "text" ng-model = "new_address.address" 
+        class="form-control" placeholder = "address"> </input>
+      </div>
+
+      <div class="form-group">
+        <input type = "text" ng-model = "new_address.postalcode" 
+        class="form-control" placeholder = "postalcode"> </input>
+      </div>
+
+      <div class="form-group">
+        <input type = "text" ng-model = "new_address.postalcity" 
+        class="form-control" placeholder = "postalcity"> </input>
+      </div>
+
+      <div class="form-group">
+        <input type = "text" ng-model = "new_address.municipality" 
+        class="form-control" placeholder = "municipality"> </input>
+      </div>
+
+      <div class="form-group">
+        <input type = "text" ng-model = "new_address.countrycode"
+        class="form-control" placeholder = "countrycode"> </input>
+      </div>
+
+      <div class="form-group">
+        <input type = "email" ng-model = "new_address.email" 
+        class="form-control" placeholder = "Some mail"> </input>
+        <span class="help-block">Enter a valid e-mail here</span>
+      </div>
+      </div>
+    </form>
   </div>
 </div>
+
+<div class="col-md-8">
+  <ul class="address">
+    <li ng-repeat="item in address | filter:query | orderBy: orderProp"  class="address-listing">
+      <a href="#/{{item.userseqno}}">Details</a>
+      <p>{{item.address}}</p>
+      <p>{{item.postalcity}}</p>
+      <p>{{item.postalcode | checkmark }}</p>
+
+    </li>
+  </ul>
+</div>
+

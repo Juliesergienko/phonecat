@@ -1,16 +1,14 @@
 <div class = "col-md-4">
-<img ng-src = "/home/julia/D_copy/ReachMee/trunk/phonecat/server/app/static/images/{{addressId}}">
+<img ng-src = "/images/{{addressId}}">
 </div>
 
 <div class = "col-md-8">
 <br/>
 <h3 class = "text-primary">
-	<p ng-if = "show_info.userseqno" >userseqno: {{show_info.userseqno}}</p>
-	<p ng-if = "show_info.addresstype" >addresstype: {{show_info.addresstype}}</p>
-	<p ng-if = "show_info.address" >address: {{show_info.address}}</p>
-	<p ng-if = "show_info.postalcode" >postalcode: {{show_info.postalcode}}</p>
-	<p ng-if = "show_info.postalcity" >postalcity: {{show_info.postalcity}}</p>
-	<p ng-if = "show_info.municipality" >municipality: {{show_info.municipality}}</p>
+
+	<span ng-repeat = "(key, value) in show_info">
+	<span ng-if = "value">{{key}} : {{value}} <br/></span></span>
+
 </h3>
 </div>
 

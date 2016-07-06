@@ -16,6 +16,10 @@ phonecatApp.config(['$routeProvider',
         templateUrl: 'phone-detail.html',
         controller: 'PhoneDetailCtrl'
       }).
+      when('/address/:addressId', {
+        templateUrl: 'phonecat.html',
+        controller: 'PhoneListCtrl'
+      }).
       otherwise({
         redirectTo: '/'
       });
