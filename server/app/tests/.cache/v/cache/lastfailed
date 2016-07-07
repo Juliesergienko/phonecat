@@ -1,0 +1,4 @@
+{
+  "views_test.py::test_delete_address_id": true, 
+  "views_test.py::test_get_address_id": true
+}

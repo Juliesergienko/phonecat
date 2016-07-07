@@ -40,16 +40,23 @@ def send_image(img_number):
 	file_name = "images/"+str(img_number)+".png" 
 	return app.send_static_file(file_name)
 
+@app.route('/hello')
+def hello():
+	return "hello!"
+
 class Address(Resource):
-	def get(self):
+	def get(self, addressId = None):
+		print 'I am in here'
 		#cursor = g.db.cursor()
 		g.cursor.execute("SELECT * FROM rm0.address WHERE NOT address = ''")
 		address_list = g.cursor.fetchall()
-		print "address_list", address_list
+		#print "address_list", address_list
 		return address_list
 
 	def put(self, addressId = None):
+		print "###########################################"
 		new_address = json.loads(request.data)
+
 		print "new_address", new_address
 		if new_address:
 			
@@ -73,7 +80,7 @@ class Address(Resource):
 		print "will be deleted: " + str(address_to_delete)
 		return "Item was deleted"
 
-	def post(self):
+	def post(self, addressId = None):
 		args = parser.parse_args()
 		address_id = args["id"]
 		print "address_id", address_id
@@ -84,7 +91,7 @@ class Address(Resource):
 			return address
 		except Exception as e:
 			print e
-			return "Item was returned"
+			return "Item was not returned"
 
 api.add_resource(Address, '/address', '/<int:addressId>', '/address/<int:addressId>')
 
