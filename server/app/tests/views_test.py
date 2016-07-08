@@ -57,26 +57,48 @@ def test_get_address(url):
 def test_delete_address_without_id(url, result):
 	with app.test_client() as c:
 		response = c.delete(url)
-		print "in delete", response
 		assert json.loads(response.data) == result
 
 @pytest.mark.parametrize("url, data, result", [('/address',{"id":14882}, real_data),
 										('/address/14882',{"id":14882}, real_data),
+										('/address/52',{"id":52}, "Item was not returned"),
 										('/14882', {"id":14882} ,real_data)])
 def test_post_address_id(url, data, result):
 	with app.test_client() as c:
-		response = c.post(url, data = data)
-		print "in post", json.loads(response.data)
-		
+		response = c.post(url, data = data)		
 		assert json.loads(response.data) == result
 
 @pytest.mark.parametrize("url, data, result", [('/address',json.dumps(put_data), "some problems"),
 										('/address/14882',json.dumps(put_data), "some problems"),
-										('/14882', json.dumps(put_data) ,"some problems")])#because of that trigger insert error
+										('/14882', json.dumps(put_data) ,"some problems"),
+										('/14882', json.dumps('') ,{'message': 'Internal Server Error'})])#because of that trigger insert error
 def test_put_address_id(url, data, result):
-	
-	print "in put"
 	with app.test_client() as c:
 		response = c.put(url, data = data)
 		assert json.loads(response.data) == result
+
+@pytest.mark.parametrize("filename", ['index.html', 'phonecat_script.js', 'app.js'])
+def test_get_static_file(filename):
+	with app.test_client() as c:
+		response = c.get("/"+filename)
+		open_name = "static/"+filename
+		index_file = open(open_name, 'r')
+		index_file_content = index_file.read()
+		assert response.data == index_file_content
+
+def test_get_index_file():
+	with app.test_client() as c:
+		response = c.get("/")
+		index_file = open("static/index.html", 'r')
+		index_file_content = index_file.read()
+		assert response.data == index_file_content
+
+@pytest.mark.parametrize("img_number", [14882, 14967, 14881])
+def test_get_image(img_number):
+	with app.test_client() as c:
+		response = c.get("/images/"+str(img_number))
+		open_name = "static/images/"+str(img_number)+".png"
+		index_file = open(open_name, 'r')
+		index_file_content = index_file.read()
+		assert response.data == index_file_content
 
