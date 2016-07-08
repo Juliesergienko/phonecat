@@ -1,7 +1,8 @@
 import sys
 import pytest
 
-sys.path.append('..')
+sys.path.append('../')
+print sys.path
 
 from app import *
 

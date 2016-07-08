@@ -40,80 +40,43 @@ u'postalcity': u'G\xf6teborg', u'address': u'Kungsgatan 3', u'postalcode': u'600
  u'postalcity': u'Torslanda ', u'address': u'Meridianv\xe4gen 6, test', u'postalcode': u'4233899',
   u'userseqno': 0}]
 
+real_data = {u'addresstype': 1, u'countrycode': 143, u'seqno': 283, u'municipality': None,
+		u'postalcity': u'Nacka', u'address': u'Alpstigen 3', u'postalcode': u'131 54', u'userseqno': 14882}
+put_data = {u'addresstype': 1, u'countrycode': 153, u'municipality': None,
+		u'postalcity': None, u'address': u'Alpstigen 35', u'postalcode': u'178 54', u'userseqno': 14856}
 
-
-def test_doc():
+@pytest.mark.parametrize("url", ['/address', '/address/67', '/67'])
+def test_get_address(url):
 	with app.test_client() as c:
-		rv = c.get('/?tequila=42')
-		assert request.args['tequila'] == '42'
-
-
-# def test_get_address():
-# 	response = app.test_client().get("/address")
-#	assert request.args[""]==db_address_answer
-
-def test_get_address():
-	with app.test_client() as c:
-		response = c.get('/address')
+		response = c.get(url)
 		assert json.loads(response.data) == db_address_answer
 
-def test_get_id():
+@pytest.mark.parametrize("url, result", [('/address', {'message': 'Internal Server Error'}),
+										('/address/14882', "Item was deleted"),
+										('/14882', "Item was deleted")])
+def test_delete_address_without_id(url, result):
 	with app.test_client() as c:
-		response = c.get('/67')
-		assert json.loads(response.data) == db_address_answer
-
-def test_get_address_id():
-	with app.test_client() as c:
-		response = c.get('/address/67')
-		assert json.loads(response.data) == db_address_answer
-
-def test_delete_address_without_id():
-	with app.test_client() as c:
-		response = c.delete("/address")
+		response = c.delete(url)
 		print "in delete", response
-		assert response.status_code == 500
+		assert json.loads(response.data) == result
 
-def test_delete_address_id():
+@pytest.mark.parametrize("url, data, result", [('/address',{"id":14882}, real_data),
+										('/address/14882',{"id":14882}, real_data),
+										('/14882', {"id":14882} ,real_data)])
+def test_post_address_id(url, data, result):
 	with app.test_client() as c:
-		response = c.delete("/address/14882")
-		print "in delete", response.data
-		assert response.data == '"Item was deleted"\n'
-
-def test_delete_id():
-	with app.test_client() as c:
-		response = c.delete("/14882")
-		print "in delete", response.data
-		assert response.data == '"Item was deleted"\n'
-
-def test_post_address_id():
-	with app.test_client() as c:
-		response = c.post("/address/14882", {},{"id":14882})
+		response = c.post(url, data = data)
 		print "in post", json.loads(response.data)
-		real_data = {u'addresstype': 1, u'countrycode': 143, u'seqno': 283, u'municipality': None,
-		u'postalcity': u'Nacka', u'address': u'Alpstigen 3', u'postalcode': u'131 54', u'userseqno': 14882}
+		
+		assert json.loads(response.data) == result
 
-		assert json.loads(response.data) == real_data
-
-def test_posts_id():
-	with app.test_client() as c:
-		response = c.post("/14882", {},{"id":14882})
-		print "in post", json.loads(response.data)
-		real_data = {u'addresstype': 1, u'countrycode': 143, u'seqno': 283, u'municipality': None,
-		u'postalcity': u'Nacka', u'address': u'Alpstigen 3', u'postalcode': u'131 54', u'userseqno': 14882}
-		assert json.loads(response.data) == real_data
-
-def test_put_address_id():
-	put_data = {u'addresstype': 1, u'countrycode': 153, u'municipality': None,
-		u'postalcity': None, u'address': u'Alpstigen 35', u'postalcode': u'178 54', u'userseqno': 14856}
+@pytest.mark.parametrize("url, data, result", [('/address',json.dumps(put_data), "some problems"),
+										('/address/14882',json.dumps(put_data), "some problems"),
+										('/14882', json.dumps(put_data) ,"some problems")])#because of that trigger insert error
+def test_put_address_id(url, data, result):
+	
 	print "in put"
 	with app.test_client() as c:
-		response = c.put("/address/14856", data = json.dumps(put_data))
-		assert json.loads(response.data) =="some problems" #because of that trigger insert errors
+		response = c.put(url, data = data)
+		assert json.loads(response.data) == result
 
-def test_put_address():
-	put_data = {u'addresstype': 1, u'countrycode': 153, u'municipality': None,
-		u'postalcity': None, u'address': u'Alpstigen 35', u'postalcode': u'178 54', u'userseqno': 14856}
-	print "in put"
-	with app.test_client() as c:
-		response = c.put("/address", data = json.dumps(put_data))
-		assert json.loads(response.data) =="some problems" #because of that trigger insert errors
